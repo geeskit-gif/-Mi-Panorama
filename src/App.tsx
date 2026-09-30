@@ -629,12 +629,15 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState<boolean>(() => {
     try {
       const onboarded = localStorage.getItem('mp_hasOnboarded') === 'true';
-      if (onboarded) return false;
+      const setupStarted = localStorage.getItem('mp_setupStarted') === 'true';
       const c = localStorage.getItem('mp_cards');
       const parsed = c ? JSON.parse(c) : [];
       const demo = localStorage.getItem('mp_demo') === 'true';
       const hasCards = Array.isArray(parsed) && parsed.length > 0;
-      return !hasCards && !demo;
+      // Show the first-entry screen until the user has actually started setup
+      // or has real cards. This also repairs older sessions that only stored mp_hasOnboarded.
+      if (!hasCards && !demo && (!onboarded || !setupStarted)) return true;
+      return false;
     } catch { return true; }
   });
 
@@ -785,6 +788,7 @@ export default function App() {
       localStorage.setItem('mp_demo', 'false');
       localStorage.setItem('mp_cards', JSON.stringify(restored));
       localStorage.setItem('mp_hasOnboarded','true');
+      localStorage.setItem('mp_setupStarted','true');
     } catch {}
     setTab('tarjetas');
   };
