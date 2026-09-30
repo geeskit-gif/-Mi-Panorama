@@ -825,8 +825,22 @@ export default function App() {
               {/* PRIMARY VISUAL REFERENCE - exact as uploaded, max 340px */}
               <img src={logoUrl} alt="Mi Panorama - Eagle Compass Credit Cards" className="relative w-[320px] max-w-[84vw] h-auto object-contain select-none" style={{ maxWidth: '340px', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.55)) drop-shadow(0 0 20px rgba(46,90,138,0.28))' }} />
             </div>
-            <h1 className="mt-8 text-[30px] md:text-[38px] leading-[0.95] tracking-[0.12em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
-            <p className="mt-4 max-w-[38ch] font-mono text-[13px] tracking-[0.02em] leading-[1.7] text-[#A9B8BB]">{t.onboarding.sub}</p>
+            <h1 className="mt-6 text-[23px] md:text-[30px] leading-[1] tracking-[0.08em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
+            <p className="mt-3 max-w-[38ch] font-mono text-[12px] md:text-[13px] tracking-[0.01em] leading-[1.65] text-[#A9B8BB]">{t.onboarding.sub}</p>
+
+            <div className="mt-6 w-full max-w-[390px] grid gap-2.5 text-left">
+              {t.onboarding.points.map((point: string) => {
+                const [label, ...rest] = point.split(' — ');
+                return (
+                  <div key={label} className="flex items-start gap-3 px-1">
+                    <span className="mt-[5px] w-[5px] h-[5px] shrink-0 rounded-full bg-[#3A6E9E]" />
+                    <span className="font-mono text-[10px] md:text-[11px] leading-[1.5] tracking-[0.04em] text-[#A9B8BB]">
+                      <span className="text-[#EDE9E3] font-[700]">{label}</span>{rest.length ? <> — {rest.join(' — ')}</> : null}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
 
             <div className="mt-10 w-full max-w-[380px] grid gap-3">
               <button onClick={handleCreatePanorama} className="w-full h-[48px] min-h-[48px] rounded-full bg-[#3A6E9E] border border-[#2E5A8A] text-[11px] tracking-[0.16em] uppercase font-[800] text-[#EDE9E3] hover:bg-[#2E5A8A] transition active:scale-[0.98] shadow-[0_8px_24px_rgba(46,90,138,0.35),inset_0_1px_0_rgba(255,255,255,0.18)]">
