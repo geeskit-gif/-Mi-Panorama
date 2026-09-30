@@ -823,7 +823,7 @@ export default function App() {
             <div className="relative">
               <div className="absolute -inset-12 rounded-full opacity-25 blur-[32px]" style={{ background: 'radial-gradient(circle, rgba(46,90,138,0.38) 0%, rgba(200,168,106,0.14) 44%, transparent 72%)' }} />
               {/* PRIMARY VISUAL REFERENCE - exact as uploaded, max 340px */}
-              <img src={logoUrl} alt="Mi Panorama - Eagle Compass Credit Cards" className="relative w-[320px] max-w-[84vw] h-auto object-contain select-none" style={{ maxWidth: '340px', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.55)) drop-shadow(0 0 20px rgba(46,90,138,0.28))' }} />
+              <img src={logoUrl} alt="Mi Panorama - Eagle Compass Credit Cards" className="relative w-[300px] max-w-[82vw] h-auto object-contain select-none" style={{ maxWidth: '320px', maxHeight: '34vh', objectFit: 'contain', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.55)) drop-shadow(0 0 20px rgba(46,90,138,0.28))' }} />
             </div>
             <h1 className="mt-6 text-[23px] md:text-[30px] leading-[1] tracking-[0.08em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
             <p className="mt-3 max-w-[38ch] font-mono text-[12px] md:text-[13px] tracking-[0.01em] leading-[1.65] text-[#A9B8BB]">{t.onboarding.sub}</p>
