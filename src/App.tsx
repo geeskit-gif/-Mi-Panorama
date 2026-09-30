@@ -144,7 +144,21 @@ const i18n = {
       neutral1: 'Con esta tarjeta, tu saldo cambiaría de',
       neutral2: 'a',
       neutral3: 'Tu utilización pasaría de',
-      truthNote: 'Esta herramienta no te dice qué tarjeta es mejor. Te muestra lo que cambia con cada opción según lo que sí sabemos.',
+      truthNote: 'Comparamos alternativas con tus datos. No predecimos cuánto cambiará tu score ni inventamos información del emisor.',
+      scoreLabel: 'Tu score crediticio',
+      scoreHint: 'Opcional. Escríbelo tal como aparece en la fuente donde lo consultaste.',
+      scoreUnknown: 'Sin score registrado',
+      scoreNote: 'El score es un dato de contexto. No usamos un modelo propio para predecir cuánto cambiará.',
+      alternativesTitle: 'Alternativas para esta compra',
+      lowerImpact: 'Menor impacto conocido',
+      reportTiming: 'Reporte',
+      cutoff: 'Corte',
+      payment: 'Pago',
+      impact: 'Impacto conocido',
+      utilizationChange: 'Cambio de utilización',
+      unknownTiming: 'Momento de reporte desconocido',
+      knownAtCutoff: 'Registrado en fecha de corte',
+      unavailable: 'No calculable con los datos actuales',
       whyTitle: 'Qué podemos calcular sobre el momento',
       unknown: 'No tenemos fecha de corte para hacer este cálculo local.',
       listUnknown: [
@@ -605,6 +619,13 @@ export default function App() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Partial<CardData>>({ nombre: '', emisor: '', limite: null, saldo: null, corte: null, pago: null, last4: null, reporte: 'desconocido' });
   const [monto, setMonto] = useState<number>(2500);
+  const [creditScore, setCreditScore] = useState<number | null>(() => {
+    try {
+      const raw = localStorage.getItem('mp_creditScore');
+      const n = raw === null ? NaN : Number(raw);
+      return isFinite(n) && n >= 300 && n <= 850 ? n : null;
+    } catch { return null; }
+  });
   const [glossaryQ, setGlossaryQ] = useState('');
   const [openGlos, setOpenGlos] = useState<string | null>('corte');
   const [showLimit, setShowLimit] = useState(false);
@@ -615,6 +636,12 @@ export default function App() {
   useEffect(() => { setStorage('mp_cards', cards); }, [cards]);
   useEffect(() => { try { localStorage.setItem('mp_demo', String(isDemo)); } catch {} }, [isDemo]);
   useEffect(() => { try { localStorage.setItem('mp_hasOnboarded', String(hasOnboarded)); } catch {} }, [hasOnboarded]);
+  useEffect(() => {
+    try {
+      if (creditScore === null) localStorage.removeItem('mp_creditScore');
+      else localStorage.setItem('mp_creditScore', String(creditScore));
+    } catch {}
+  }, [creditScore]);
   useEffect(() => { if (toast) { const id = setTimeout(() => setToast(null), 2800); return () => clearTimeout(id); } }, [toast]);
 
   const totalLimite = useMemo(() => cards.reduce((a, c) => a + (c.limite ?? 0), 0), [cards]);
@@ -1093,6 +1120,27 @@ export default function App() {
                   <div className="text-[11px] tracking-[0.12em] uppercase font-[800] text-[#101A16]">{t.comprar.datos}</div>
                   <div className="mt-5 space-y-4">
                     <div>
+                      <label className="text-[10px] font-mono tracking-[0.12em] uppercase text-[#6B7C7F]">{t.comprar.scoreLabel}</label>
+                      <input
+                        type="number"
+                        value={creditScore ?? ''}
+                        onChange={e => {
+                          const raw = e.target.value;
+                          if (raw === '') { setCreditScore(null); return; }
+                          const next = Number(raw);
+                          setCreditScore(isFinite(next) && next >= 300 && next <= 850 ? next : null);
+                        }}
+                        min={300}
+                        max={850}
+                        step="1"
+                        placeholder="300–850"
+                        className="mt-2 w-full h-[48px] rounded-[12px] border bg-white px-4 font-mono text-[16px] text-[#101A16] focus:outline-none focus:border-[#3A6E9E]"
+                        style={{ borderColor: '#D6D2CC' }}
+                        inputMode="numeric"
+                      />
+                      <div className="mt-1.5 font-mono text-[9px] leading-[1.5] text-[#6B7C7F]">{t.comprar.scoreHint}</div>
+                    </div>
+                    <div>
                       <label className="text-[10px] font-mono tracking-[0.12em] uppercase text-[#6B7C7F]">{t.comprar.monto} MXN</label>
                       <div className="mt-2 flex items-center gap-2">
                         <span className="font-mono text-[28px] leading-none text-[#101A16]">$</span>
@@ -1135,7 +1183,13 @@ export default function App() {
                     <div className="rounded-[16px] border bg-[#121E1B] p-8 text-center" style={{ borderColor: '#2A3F4A' }}>
                       <div className="font-mono text-[12px] text-[#8BA3B8]">{t.comprar.noCards}</div>
                     </div>
-                  ) : cards.map(card => {
+                  ) : (
+                    <>
+                      <div className="rounded-[16px] border bg-[#F6F4F0] p-4" style={{ borderColor: '#D6D2CC' }}>
+                        <div className="text-[11px] tracking-[0.12em] uppercase font-[800] text-[#101A16]">{t.comprar.alternativesTitle}</div>
+                        <div className="mt-2 font-mono text-[10px] leading-[1.5] text-[#6B7C7F]">{t.comprar.truthNote}</div>
+                      </div>
+                      {cards.map(card => {
                     const saldo = card.saldo;
                     const limite = card.limite;
                     const nuevoSaldo = saldo !== null ? saldo + monto : null;
@@ -1168,7 +1222,14 @@ export default function App() {
                             <div className={`mt-1 ${exceeds ? 'text-[#E8A0A0] font-[700]' : 'text-[#D6D2CC]'}`}>{dispDesp!==null ? formatMoney(dispDesp, lang) : '—'}</div>
                           </div>
                         </div>
-                        <div className="mt-3 rounded-[12px] border bg-[#F6F4F0] p-3" style={{ borderColor: '#D6D2CC', boxShadow: 'inset 0 1px 0 #E8E4DE' }}>
+                        <div className="mt-5 rounded-[12px] border bg-[#121E1B] p-3" style={{ borderColor: '#2A3F4A' }}>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-[10px] tracking-[0.12em] uppercase font-mono text-[#8BA3B8]">{t.comprar.scoreLabel}</div>
+                    <div className="font-mono text-[15px] font-[700] text-[#EDE9E3]">{creditScore ?? t.comprar.scoreUnknown}</div>
+                  </div>
+                  <div className="mt-2 text-[9px] leading-[1.5] font-mono text-[#6B7C7F]">{t.comprar.scoreNote}</div>
+                </div>
+                <div className="mt-3 rounded-[12px] border bg-[#F6F4F0] p-3" style={{ borderColor: '#D6D2CC', boxShadow: 'inset 0 1px 0 #E8E4DE' }}>
                           {missingData ? (
                             <div className="flex items-center gap-2">
                               <TrustBadge type="desconocida" lang={lang} />
@@ -1188,7 +1249,9 @@ export default function App() {
                         </div>
                       </div>
                     );
-                  })}
+                      })}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
