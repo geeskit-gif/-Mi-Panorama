@@ -1068,7 +1068,14 @@ export default function App() {
                         <input
                           type="number"
                           value={monto}
-                          onChange={e => setMonto(Number(e.target.value) || 0)}
+                          onChange={e => {
+                            const raw = e.target.value;
+                            if (raw === '') { setMonto(0); return; }
+                            const next = Number(raw);
+                            setMonto(isFinite(next) && next >= 0 ? next : 0);
+                          }}
+                          min={0}
+                          step="0.01"
                           className="w-full h-[64px] rounded-[12px] border bg-white px-4 font-mono text-[28px] leading-none text-[#101A16] focus:outline-none focus:border-[#3A6E9E]"
                           style={{ borderColor: '#D6D2CC' }}
                           inputMode="numeric"
