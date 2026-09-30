@@ -1203,7 +1203,17 @@ export default function App() {
                         <div className="text-[11px] tracking-[0.12em] uppercase font-[800] text-[#101A16]">{t.comprar.alternativesTitle}</div>
                         <div className="mt-2 font-mono text-[10px] leading-[1.5] text-[#6B7C7F]">{t.comprar.truthNote}</div>
                       </div>
-                      {cards.map(card => {
+                      {[...cards].sort((a, b) => {
+                        const score = (card: CardData) => {
+                          if (card.saldo === null || card.limite === null || card.limite <= 0) return Number.POSITIVE_INFINITY;
+                          const after = ((card.saldo + monto) / card.limite) * 100;
+                          const before = (card.saldo / card.limite) * 100;
+                          const delta = after - before;
+                          const exceeds = card.saldo + monto > card.limite;
+                          return (exceeds ? 100000 : 0) + delta;
+                        };
+                        return score(a) - score(b);
+                      }).map((card, rank) => {
                     const saldo = card.saldo;
                     const limite = card.limite;
                     const nuevoSaldo = saldo !== null ? saldo + monto : null;
@@ -1222,6 +1232,12 @@ export default function App() {
                     const utilizationDelta = utilAntes !== null && utilDesp !== null ? utilDesp - utilAntes : null;
                     return (
                       <div key={card.id} className="rounded-[16px] border bg-[#121E1B] p-[18px] shadow-[0_8px_24px_rgba(0,0,0,0.28)]" style={{ borderColor: exceeds ? '#8B3A3A' : '#2A3F4A' }}>
+                        {rank === 0 && !exceeds && !missingData && (
+                          <div className="mb-3 flex items-center justify-between gap-2 rounded-[10px] border px-3 py-2" style={{ borderColor: '#3A6E9E', background: 'rgba(58,110,158,0.10)' }}>
+                            <span className="text-[9px] tracking-[0.12em] uppercase font-mono text-[#AFC7DB]">{t.comprar.lowerImpact}</span>
+                            <span className="text-[9px] font-mono text-[#8BA3B8]">{t.comprar.utilizationChange}: {utilDesp !== null && utilAntes !== null ? `${utilDesp - utilAntes >= 0 ? '+' : ''}${(utilDesp - utilAntes).toFixed(1)} pp` : '—'}</span>
+                          </div>
+                        )}
                         <div className="flex items-center justify-between gap-2">
                           <div className="text-[12px] font-[700] text-[#EDE9E3]">{card.emisor} {card.nombre} {card.last4 ? `•••• ${card.last4}` : `(${t.tarjetas.noLast4})`}</div>
                           {exceeds && <span className="px-2 py-[2px] rounded-full bg-[#8B3A3A]/20 border border-[#8B3A3A]/40 text-[9px] font-mono tracking-[0.12em] uppercase text-[#E8A0A0]">{lang==='es'?'Supera':'Exceeds'}</span>}
