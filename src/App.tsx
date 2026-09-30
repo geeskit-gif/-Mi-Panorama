@@ -818,7 +818,7 @@ export default function App() {
 
       {/* ONBOARDING FULLSCREEN */}
       {showOnboarding && (
-        <div className="fixed inset-0 z-[80] flex items-start md:items-center justify-center p-4 md:p-8 overflow-y-auto" style={{ background: 'radial-gradient(110% 90% at 50% 0%, #121E1B 0%, #0F1A16 34%, #0C1511 100%)', paddingTop: 'var(--safe-area-inset-top, 0px)' }}>
+        <div className={`fixed inset-0 z-[80] flex items-start md:items-center justify-center p-4 md:p-8 overflow-y-auto ${theme === 'dark' ? 'bg-[#0F1A16] text-[#FFFFFF]' : 'bg-[#F3F6F5] text-[#18221F]'}`} style={{ background: theme === 'dark' ? 'radial-gradient(110% 90% at 50% 0%, #121E1B 0%, #0F1A16 34%, #0C1511 100%)' : '#F3F6F5', paddingTop: 'var(--safe-area-inset-top, 0px)' }}>
           <div className="w-full max-w-[560px] md:max-w-[980px] flex flex-col md:flex-row items-center md:items-center justify-center gap-6 md:gap-12 text-center md:text-left py-4 md:py-6 min-h-full">
             <div className="relative shrink-0 md:w-[420px] flex justify-center">
               <div className="absolute -inset-12 rounded-full opacity-25 blur-[32px]" style={{ background: 'radial-gradient(circle, rgba(46,90,138,0.38) 0%, rgba(200,168,106,0.14) 44%, transparent 72%)' }} />
@@ -835,8 +835,8 @@ export default function App() {
                 return (
                   <div key={label} className="flex items-start gap-3 px-1">
                     <span className="mt-[5px] w-[5px] h-[5px] shrink-0 rounded-full bg-[#3A6E9E]" />
-                    <span className="font-mono text-[10px] md:text-[11px] leading-[1.5] tracking-[0.04em] text-[#A9B8BB]">
-                      <span className="text-[#EDE9E3] font-[700]">{label}</span>{rest.length ? <> — {rest.join(' — ')}</> : null}
+                    <span className="font-mono text-[10px] md:text-[11px] leading-[1.5] tracking-[0.04em] text-[#DDE7E4]">
+                      <span className="text-[#FFFFFF] font-[700]">{label}</span>{rest.length ? <> — {rest.join(' — ')}</> : null}
                     </span>
                   </div>
                 );
@@ -847,20 +847,29 @@ export default function App() {
               <button onClick={handleCreatePanorama} className="w-full h-[48px] min-h-[48px] rounded-full bg-[#3A6E9E] border border-[#2E5A8A] text-[11px] tracking-[0.16em] uppercase font-[800] text-[#EDE9E3] hover:bg-[#2E5A8A] transition active:scale-[0.98] shadow-[0_8px_24px_rgba(46,90,138,0.35),inset_0_1px_0_rgba(255,255,255,0.18)]">
                 {t.onboarding.ctaPrimary}
               </button>
-              <button onClick={handleExploreSample} className="w-full h-[48px] min-h-[48px] rounded-full bg-transparent border text-[11px] tracking-[0.14em] uppercase font-[700] text-[#D6D2CC] hover:bg-[#15211C] transition active:scale-[0.98]" style={{ borderColor: '#D6D2CC' }}>
+              <button onClick={handleExploreSample} className={`w-full h-[48px] min-h-[48px] rounded-full bg-transparent border text-[11px] tracking-[0.14em] uppercase font-[700] transition active:scale-[0.98] ${theme === 'dark' ? 'text-[#D6D2CC] hover:bg-[#15211C]' : 'text-[#33443F] hover:bg-[#E8EFEC]'}`} style={{ borderColor: '#D6D2CC' }}>
                 {t.onboarding.ctaSecondary}
               </button>
             </div>
 
-            <div className="mt-5 md:mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border bg-[#101A16]/80 backdrop-blur" style={{ borderColor: '#1E2F27' }}>
+            <div className={`mt-5 md:mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border backdrop-blur ${theme === 'dark' ? 'bg-[#101A16]/80' : 'bg-white/80'}`} style={{ borderColor: theme === 'dark' ? '#1E2F27' : '#D7E0DD' }}>
               <span className="w-[5px] h-[5px] rounded-full bg-[#3A6E9E] shadow-[0_0_8px_rgba(58,110,158,0.6)]" />
               <span className="font-mono text-[9px] tracking-[0.12em] text-[#8FA0A3] uppercase">{t.onboarding.trustRow}</span>
             </div>
 
             <div className="mt-4 md:mt-6 flex items-center gap-2">
-              <div className="flex items-center rounded-full border p-[3px] bg-[#101A16]" style={{ borderColor: '#2A3F4A' }}>
-                <button onClick={() => setLang('es')} className={`h-[30px] min-h-[30px] px-4 rounded-full text-[10px] tracking-[0.12em] font-mono uppercase font-[700] transition ${lang === 'es' ? 'bg-[#F6F4F0] text-[#101A16] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]' : 'text-[#8BA3B8] hover:text-[#D6D2CC]'}`}>ES</button>
-                <button onClick={() => setLang('en')} className={`h-[30px] min-h-[30px] px-4 rounded-full text-[10px] tracking-[0.12em] font-mono uppercase font-[700] transition ${lang === 'en' ? 'bg-[#F6F4F0] text-[#101A16] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]' : 'text-[#8BA3B8] hover:text-[#D6D2CC]'}`}>EN</button>
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+                title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+                className={`h-[36px] min-h-[36px] w-[36px] rounded-full border grid place-items-center text-[16px] transition active:scale-[0.96] ${theme === 'dark' ? 'bg-[#121E1B] text-[#F6F4F0]' : 'bg-white text-[#18221F]'}`}
+                style={{ borderColor: theme === 'dark' ? '#2A3F4A' : '#C8D5D1' }}
+              >
+                {theme === 'dark' ? '☀︎' : '☾'}
+              </button>
+              <div className={`flex items-center rounded-full border p-[3px] ${theme === 'dark' ? 'bg-[#101A16]' : 'bg-white'}`} style={{ borderColor: theme === 'dark' ? '#2A3F4A' : '#C8D5D1' }}>
+                <button onClick={() => setLang('es')} className={`h-[30px] min-h-[30px] px-4 rounded-full text-[10px] tracking-[0.12em] font-mono uppercase font-[700] transition ${lang === 'es' ? (theme === 'dark' ? 'bg-[#F6F4F0] text-[#101A16]' : 'bg-[#18221F] text-white') : (theme === 'dark' ? 'text-[#8BA3B8] hover:text-[#D6D2CC]' : 'text-[#58706B] hover:text-[#18221F]')}`}>ES</button>
+                <button onClick={() => setLang('en')} className={`h-[30px] min-h-[30px] px-4 rounded-full text-[10px] tracking-[0.12em] font-mono uppercase font-[700] transition ${lang === 'en' ? (theme === 'dark' ? 'bg-[#F6F4F0] text-[#101A16]' : 'bg-[#18221F] text-white') : (theme === 'dark' ? 'text-[#8BA3B8] hover:text-[#D6D2CC]' : 'text-[#58706B] hover:text-[#18221F]')}`}>EN</button>
               </div>
             </div>
           </div>
@@ -1533,6 +1542,12 @@ export default function App() {
         .theme-light header{ background:rgba(246,249,248,0.94) !important; border-color:#D7E0DD !important; }
         .theme-light main{ color:#18221F !important; }
         .theme-light [class*="text-[#EDE9E3]"]{ color:#18221F !important; }
+        .theme-light [class*="text-[#FFFFFF]"]{ color:#18221F !important; }
+        .theme-light [class*="text-[#DDE7E4]"]{ color:#33443F !important; }
+        .theme-light [class*="text-[#D6D2CC]"]{ color:#33443F !important; }
+        .theme-light [class*="text-[#3A6E9E]"]{ color:#2E5A8A !important; }
+        .theme-light [class*="bg-[#F6F4F0]"]{ background:#FFFFFF !important; }
+        .theme-light [class*="border-[#D6D2CC]"]{ border-color:#C8D5D1 !important; }
         .theme-light [class*="text-[#D6D2CC]"]{ color:#33443F !important; }
         .theme-light [class*="text-[#A9B8BB]"]{ color:#52635F !important; }
         .theme-light [class*="text-[#8BA3B8]"]{ color:#58706B !important; }
