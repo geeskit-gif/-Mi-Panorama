@@ -369,6 +369,32 @@ function getStorage<T>(key: string, fallback: T): T {
     return JSON.parse(v) as T;
   } catch { return fallback; }
 }
+
+function getStoredCards(): CardData[] {
+  try {
+    const raw = localStorage.getItem('mp_cards');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((c): c is CardData => c && typeof c === 'object' && typeof c.id === 'string' && typeof c.nombre === 'string' && typeof c.emisor === 'string')
+      .map(c => ({
+        id: c.id,
+        nombre: c.nombre.trim(),
+        emisor: c.emisor.trim(),
+        limite: typeof c.limite === 'number' && isFinite(c.limite) && c.limite >= 0 ? c.limite : null,
+        saldo: typeof c.saldo === 'number' && isFinite(c.saldo) && c.saldo >= 0 ? c.saldo : null,
+        corte: typeof c.corte === 'number' && isFinite(c.corte) && c.corte >= 1 && c.corte <= 31 ? c.corte : null,
+        pago: typeof c.pago === 'number' && isFinite(c.pago) && c.pago >= 1 && c.pago <= 31 ? c.pago : null,
+        last4: typeof c.last4 === 'string' && /^\\d{4}$/.test(c.last4) ? c.last4 : null,
+        reporte: c.reporte === 'inicio_mes' || c.reporte === 'fecha_corte' || c.reporte === 'otro' ? c.reporte : 'desconocido',
+        isSample: c.isSample === true,
+      }))
+      .filter(c => c.nombre.length > 0 && c.emisor.length > 0);
+  } catch {
+    return [];
+  }
+}
 function setStorage(key: string, value: any) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
 }
@@ -551,9 +577,14 @@ export default function App() {
   const t = i18n[lang];
 
   const [tab, setTab] = useState<Tab>('panorama');
-  const [cards, setCards] = useState<CardData[]>(() => getStorage<CardData[]>('mp_cards', []));
+  const [cards, setCards] = useState<CardData[]>(() => getStoredCards());
   const [isDemo, setIsDemo] = useState<boolean>(() => {
-    try { return localStorage.getItem('mp_demo') === 'true'; } catch { return false; }
+    try {
+      const demo = localStorage.getItem('mp_demo') === 'true';
+      const stored = getStoredCards();
+      const hasSampleData = stored.some(c => c.isSample === true);
+      return demo && hasSampleData;
+    } catch { return false; }
   });
   const [hasOnboarded, setHasOnboarded] = useState<boolean>(() => {
     try { return localStorage.getItem('mp_hasOnboarded') === 'true'; } catch { return false; }
