@@ -1096,12 +1096,12 @@ export default function App() {
                 <button onClick={openAddModal} className="mt-5 h-[48px] min-h-[48px] px-6 rounded-full bg-[#101A16] border text-[#EDE9E3] text-[11px] tracking-[0.12em] uppercase font-[700]" style={{ borderColor: '#2A3F4A' }}>{t.tarjetas.add}</button>
               </div>
             ) : (
-              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 scrollbar-none">
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 scrollbar-none md:grid md:grid-cols-[repeat(auto-fit,minmax(190px,1fr))] md:overflow-visible md:snap-none">
                 {cards.map(card => {
                   const disponible = card.limite !== null && card.saldo !== null ? card.limite - card.saldo : null;
                   const utiliz = card.limite && card.saldo !== null && card.limite>0 ? (card.saldo / card.limite) * 100 : null;
                   return (
-                    <button key={card.id} type="button" onClick={() => openEditModal(card)} className="group text-left shrink-0 w-[82%] sm:w-[58%] snap-start">
+                    <button key={card.id} type="button" onClick={() => openEditModal(card)} className="group text-left shrink-0 w-[82%] sm:w-[58%] snap-start md:w-full md:min-w-0 md:snap-none">
                       <div className="relative rounded-[16px] border bg-[#101A16] p-[18px] overflow-hidden h-[204px] transition-transform duration-200 group-hover:-translate-y-[2px] group-active:scale-[0.99]" style={{ borderColor: '#2A3F4A', boxShadow: '0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(46,90,138,0.12) inset, inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                         <div className="absolute inset-0 opacity-[0.38]" style={{ background: 'radial-gradient(58% 82% at 18% 18%, rgba(58,110,158,0.34) 0%, transparent 60%), radial-gradient(42% 62% at 84% 82%, rgba(200,168,106,0.11) 0%, transparent 60%), linear-gradient(128deg, rgba(42,74,58,0.18) 0%, transparent 36%)' }} />
                         <div className="absolute -right-10 -bottom-10 w-[96px] h-[96px] rounded-full border opacity-20" style={{ borderColor: '#3A6E9E' }} />
