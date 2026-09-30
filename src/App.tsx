@@ -604,6 +604,13 @@ export default function App() {
     } catch {}
     return 'es';
   });
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    try {
+      const saved = localStorage.getItem('mp_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch {}
+    return 'dark';
+  });
   const t = i18n[lang];
 
   const [tab, setTab] = useState<Tab>('panorama');
@@ -649,6 +656,7 @@ export default function App() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => { try { localStorage.setItem('mp_lang', lang); } catch {} }, [lang]);
+  useEffect(() => { try { localStorage.setItem('mp_theme', theme); } catch {} }, [theme]);
   useEffect(() => { setStorage('mp_cards', cards); }, [cards]);
   useEffect(() => { try { localStorage.setItem('mp_demo', String(isDemo)); } catch {} }, [isDemo]);
   useEffect(() => { try { localStorage.setItem('mp_hasOnboarded', String(hasOnboarded)); } catch {} }, [hasOnboarded]);
@@ -798,7 +806,7 @@ export default function App() {
   const freeCount = cards.length;
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden text-[#1A1A1A] antialiased selection:bg-[#3A6E9E]/20" style={{ background: 'radial-gradient(120% 85% at 50% 0%, #121E1B 0%, #0F1A16 42%, #0C1511 100%)', paddingTop: 'var(--safe-area-inset-top, 0px)', scrollPaddingTop: 'calc(var(--safe-area-inset-top, 0px) + 56px)' }}>
+    <div className={`min-h-screen w-full overflow-x-hidden text-[#1A1A1A] antialiased selection:bg-[#3A6E9E]/20 theme-${theme}`} style={{ background: 'radial-gradient(120% 85% at 50% 0%, #121E1B 0%, #0F1A16 42%, #0C1511 100%)', paddingTop: 'var(--safe-area-inset-top, 0px)', scrollPaddingTop: 'calc(var(--safe-area-inset-top, 0px) + 56px)' }}>
       {/* subtle vignette */}
       <div className="pointer-events-none fixed inset-x-0 top-0 h-[520px] opacity-[0.22] overflow-hidden" style={{ background: 'radial-gradient(70% 50% at 50% -5%, rgba(46,90,138,0.18) 0%, rgba(21,33,28,0.0) 58%), radial-gradient(40% 35% at 22% 12%, rgba(200,168,106,0.09) 0%, transparent 62%)' }} />
 
@@ -875,6 +883,15 @@ export default function App() {
               <span className="w-[4px] h-[4px] rounded-full bg-[#C8A86A]" />
               <span className="font-mono text-[9px] tracking-[0.12em] text-[#8FA0A3] uppercase">{t.truth.datosLocales}</span>
             </div>
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+              className="h-[34px] min-h-[34px] w-[34px] rounded-full border bg-[#121E1B] text-[#D6D2CC] grid place-items-center text-[15px] transition hover:opacity-80 active:scale-[0.96]"
+              style={{ borderColor: '#2A3F4A' }}
+            >
+              {theme === 'dark' ? '☀︎' : '☾'}
+            </button>
             <div className="flex items-center rounded-full border p-[3px] bg-[#121E1B]" style={{ borderColor: '#2A3F4A' }}>
               <button onClick={() => setLang('es')} className={`h-[28px] min-h-[28px] px-[12px] rounded-full text-[10px] font-mono tracking-[0.12em] font-[700] transition ${lang === 'es' ? 'bg-[#F6F4F0] text-[#101A16]' : 'text-[#8BA3B8] hover:text-[#D6D2CC]'}`}>ES</button>
               <button onClick={() => setLang('en')} className={`h-[28px] min-h-[28px] px-[12px] rounded-full text-[10px] font-mono tracking-[0.12em] font-[700] transition ${lang === 'en' ? 'bg-[#F6F4F0] text-[#101A16]' : 'text-[#8BA3B8] hover:text-[#D6D2CC]'}`}>EN</button>
@@ -1515,6 +1532,33 @@ export default function App() {
         .no-scrollbar::-webkit-scrollbar{ display:none }
         .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none }
         button{ touch-action: manipulation; }
+
+        /* Light mode: same layout and components, lighter visual treatment. */
+        .theme-light{ color:#18221F !important; background:#F3F6F5 !important; }
+        .theme-light header{ background:rgba(246,249,248,0.94) !important; border-color:#D7E0DD !important; }
+        .theme-light main{ color:#18221F !important; }
+        .theme-light [class*="text-[#EDE9E3]"]{ color:#18221F !important; }
+        .theme-light [class*="text-[#D6D2CC]"]{ color:#33443F !important; }
+        .theme-light [class*="text-[#A9B8BB]"]{ color:#52635F !important; }
+        .theme-light [class*="text-[#8BA3B8]"]{ color:#58706B !important; }
+        .theme-light [class*="text-[#8FA0A3]"]{ color:#647570 !important; }
+        .theme-light [class*="text-[#6B7C7F]"]{ color:#65736F !important; }
+        .theme-light [class*="text-[#5A6A70]"]{ color:#6B7773 !important; }
+        .theme-light [class*="text-[#1A2B23]"]{ color:#24342F !important; }
+        .theme-light [class*="bg-[#121E1B]"]{ background:#FFFFFF !important; }
+        .theme-light [class*="bg-[#101A16]"]{ background:#E8EFEC !important; }
+        .theme-light [class*="bg-[#0F1A16]"]{ background:#F3F6F5 !important; }
+        .theme-light [class*="bg-[#0E1714]"]{ background:#E8EFEC !important; }
+        .theme-light [class*="bg-[#060A0B]"]{ background:#DCE5E2 !important; }
+        .theme-light [class*="border-[#2A3F4A]"]{ border-color:#C8D5D1 !important; }
+        .theme-light [style*="background: 'radial-gradient"]{ background:#F3F6F5 !important; }
+        .theme-light [style*="background: 'rgba(15,26,22"]{ background:rgba(246,249,248,0.94) !important; }
+        .theme-light [style*="background: '#0F1A16'"]{ background:#F3F6F5 !important; }
+        .theme-light [style*="background: '#121E1B'"]{ background:#FFFFFF !important; }
+        .theme-light [style*="background: '#101A16'"]{ background:#E8EFEC !important; }
+        .theme-light nav[style*="background: '#0F1A16'"]{ background:#F8FAF9 !important; border-color:#D7E0DD !important; }
+        .theme-light input, .theme-light select{ background:#FFFFFF !important; color:#18221F !important; border-color:#C8D5D1 !important; }
+        .theme-light [class*="shadow-[0_4px_24px"]{ box-shadow:0 4px 24px rgba(24,34,31,0.08) !important; }
       `}</style>
     </div>
   );
