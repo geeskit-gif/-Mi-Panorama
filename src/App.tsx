@@ -86,8 +86,8 @@ const i18n = {
         noteDisponible: 'Límite menos saldo actual',
         noteSaldo: 'Suma de saldos que registraste',
         noteUtil: 'Saldo / límite. No es calificación.',
-        noteCorte: 'Define en qué estado entra tu compra',
-        notePago: 'Fecha límite sin recargos',
+        noteCorte: 'Día que registraste; la fecha mostrada es un cálculo local',
+        notePago: 'Día que registraste; la fecha mostrada es un cálculo local',
         noteNum: 'Tarjetas registradas localmente',
       },
       listKnow: [
@@ -145,8 +145,8 @@ const i18n = {
       neutral2: 'a',
       neutral3: 'Tu utilización pasaría de',
       truthNote: 'Esta herramienta no te dice qué tarjeta es mejor. Te muestra lo que cambia con cada opción según lo que sí sabemos.',
-      whyTitle: 'Por qué importa el momento',
-      unknown: 'No tenemos fecha de corte para calcular en qué ciclo entra.',
+      whyTitle: 'Qué podemos calcular sobre el momento',
+      unknown: 'No tenemos fecha de corte para hacer este cálculo local.',
       listUnknown: [
         'No asumimos si tu emisor reporta el saldo justo en el corte o en otra fecha.',
         'No inventamos recompensas, intereses ni beneficios.',
@@ -253,8 +253,8 @@ const i18n = {
         noteDisponible: 'Limit minus current balance',
         noteSaldo: 'Sum of balances you entered',
         noteUtil: 'Balance / limit. Not a score.',
-        noteCorte: 'Defines which statement the purchase falls into',
-        notePago: 'Deadline without fees',
+        noteCorte: 'Day you entered; displayed date is a local calculation',
+        notePago: 'Day you entered; displayed date is a local calculation',
         noteNum: 'Cards stored locally',
       },
       listKnow: [
@@ -312,8 +312,8 @@ const i18n = {
       neutral2: 'to',
       neutral3: 'Your utilization would go from',
       truthNote: 'This tool does not tell you which card is best. It shows what changes with each option.',
-      whyTitle: 'Why timing matters',
-      unknown: 'We do not have statement date to estimate cycle.',
+      whyTitle: 'What we can calculate about timing'
+      unknown: 'We do not have a statement date for this local calculation.',
       listUnknown: [
         'We do not assume if issuer reports balance exactly at statement date.',
         'We do not invent rewards, interest or benefits.',
@@ -384,16 +384,25 @@ function daysInMonth(y: number, m: number) { return new Date(y, m + 1, 0).getDat
 function getNextOccurrence(day: number | null): { date: Date; daysUntil: number } | null {
   if (day === null || !isFinite(day) || day < 1 || day > 31) return null;
   const today = new Date(); today.setHours(0,0,0,0);
-  let y = today.getFullYear(); let m = today.getMonth();
-  let d = Math.min(day, daysInMonth(y, m));
-  let cand = new Date(y, m, d); cand.setHours(0,0,0,0);
-  if (cand < today) {
-    m++; if (m > 11) { m = 0; y++; }
-    d = Math.min(day, daysInMonth(y, m));
-    cand = new Date(y, m, d); cand.setHours(0,0,0,0);
+  let y = today.getFullYear();
+  let m = today.getMonth();
+
+  // Never silently convert an impossible day (e.g. 31) to another day.
+  for (let i = 0; i < 24; i++) {
+    const maxDay = daysInMonth(y, m);
+    if (day <= maxDay) {
+      const cand = new Date(y, m, day);
+      cand.setHours(0,0,0,0);
+      if (cand >= today) {
+        const diff = Math.round((cand.getTime() - today.getTime()) / 86400000);
+        return { date: cand, daysUntil: diff };
+      }
+    }
+    m++;
+    if (m > 11) { m = 0; y++; }
   }
-  const diff = Math.round((cand.getTime() - today.getTime()) / 86400000);
-  return { date: cand, daysUntil: diff };
+
+  return null;
 }
 
 function formatNextDate(info: { date: Date; daysUntil: number } | null, lang: Lang, t: any): string {
@@ -595,7 +604,7 @@ export default function App() {
     { id: 'disponible', title: 'Crédito disponible', text: 'Lo que te queda por usar: límite menos saldo. Es un valor derivado, no un hecho aparte. Si tu saldo cambia, este también.' },
     { id: 'utilizacion', title: 'Utilización', text: 'Porcentaje del límite que estás usando: saldo dividido entre límite. No es calificación, pero es señal que miran emisores y burós. Cambia cada vez que cambia tu saldo.' },
     { id: 'corte', title: 'Fecha de corte', text: 'Día en que tu emisor cierra el periodo y genera tu estado de cuenta. Lo que compras antes entra en ese estado; después, en el siguiente. Depende de tu emisor y contrato.' },
-    { id: 'pago', title: 'Fecha de pago', text: 'Fecha límite para pagar al menos el mínimo sin recargos. Suele ser 20-25 días después del corte, pero varía por emisor. Si cae en fin de semana, revisa cómo lo maneja tu banco.' },
+    { id: 'pago', title: 'Fecha de pago', text: 'Es la fecha que tu emisor indica como límite de pago. Las consecuencias de pagar después dependen de tu contrato y emisor; no asumimos un plazo universal.' },
     { id: 'reporte', title: 'Momento de reporte', text: 'Cuándo tu emisor comparte tu información con el buró. Puede ser en el corte, inicio de mes u otro día. Depende de tu emisor, no lo asumimos.' },
     { id: 'minimo', title: 'Pago mínimo', text: 'Cantidad mínima que debes pagar para no tener recargos. No es el total del estado. Si solo pagas el mínimo, el resto genera intereses. Depende de tu emisor.' },
     { id: 'saldo_corte', title: 'Pagar saldo del corte', text: 'Si pagas el total que aparece en tu estado de corte antes de la fecha de pago, evitas intereses en ese periodo. Es distinto a pagar solo el mínimo, depende de tu banco.' },
@@ -606,7 +615,7 @@ export default function App() {
     { id: 'disponible', title: 'Available credit', text: 'What remains: limit minus balance. Derived value, not separate fact.' },
     { id: 'utilizacion', title: 'Utilization', text: 'Percentage of limit you are using: balance divided by limit. Not a score, but signal issuers and bureaus watch.' },
     { id: 'corte', title: 'Statement date', text: 'Day issuer closes period and creates statement. Purchases before cut enter that statement; after, next one. Depends on your issuer.' },
-    { id: 'pago', title: 'Payment date', text: 'Deadline to pay at least minimum without fees. Usually 20-25 days after cut, varies by issuer. Depends on your bank.' },
+    { id: 'pago', title: 'Payment date', text: 'The date your issuer gives as the payment deadline. Consequences of paying after it depend on your contract and issuer; we do not assume a universal timing.' },
     { id: 'reporte', title: 'Reporting moment', text: 'When your issuer shares info with bureau. May be at cut, start of month or other day. Depends on issuer, we do not assume.' },
     { id: 'minimo', title: 'Minimum payment', text: 'Minimum you must pay to avoid fees. Not total statement. Paying only minimum generates interest on rest. Depends on issuer.' },
     { id: 'saldo_corte', title: 'Paying statement balance', text: 'If you pay total statement before due date, you avoid interest that period. Different from paying only minimum, depends on your bank.' },
