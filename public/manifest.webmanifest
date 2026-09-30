@@ -1,0 +1,20 @@
+{
+  "name": "Mi Panorama",
+  "short_name": "Mi Panorama",
+  "description": "Claridad para tus tarjetas, tus fechas y tus decisiones de crédito.",
+  "lang": "es-MX",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F1A16",
+  "theme_color": "#0F1A16",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
