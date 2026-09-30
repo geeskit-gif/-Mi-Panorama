@@ -312,7 +312,7 @@ const i18n = {
       neutral2: 'to',
       neutral3: 'Your utilization would go from',
       truthNote: 'This tool does not tell you which card is best. It shows what changes with each option.',
-      whyTitle: 'What we can calculate about timing'
+      whyTitle: 'What we can calculate about timing',
       unknown: 'We do not have a statement date for this local calculation.',
       listUnknown: [
         'We do not assume if issuer reports balance exactly at statement date.',
