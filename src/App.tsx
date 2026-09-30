@@ -865,6 +865,7 @@ export default function App() {
             </div>
           </div>
         </div>
+      </div>
       )}
 
       <header className="sticky z-40 backdrop-blur-[16px] border-b w-full overflow-hidden" style={{ top: 'var(--safe-area-inset-top, 0px)', background: 'rgba(15,26,22,0.92)', borderColor: '#1E2F27', height: '56px' }}>
