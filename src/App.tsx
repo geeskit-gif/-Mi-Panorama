@@ -827,7 +827,7 @@ export default function App() {
             </div>
             <div className="w-full max-w-[390px] md:max-w-[440px] flex flex-col items-center md:items-start">
             <h1 className="mt-0 text-[23px] md:text-[34px] leading-[1] tracking-[0.08em] font-[800] text-[#FFFFFF]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif', color: '#FFFFFF', textShadow: '0 1px 14px rgba(255,255,255,0.10)' }}>{t.onboarding.title}</h1>
-            <p className="mt-2 max-w-[38ch] font-mono text-[12px] md:text-[13px] tracking-[0.01em] leading-[1.65] text-[#A9B8BB]">{t.onboarding.sub}</p>
+            <p className="mt-2 max-w-[38ch] font-mono text-[12px] md:text-[13px] tracking-[0.01em] leading-[1.65] text-[#DDE7E4]">{t.onboarding.sub}</p>
 
             <div className="mt-4 w-full max-w-[390px] grid gap-2.5 text-left">
               {t.onboarding.points.map((point: string) => {
