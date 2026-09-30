@@ -818,14 +818,15 @@ export default function App() {
 
       {/* ONBOARDING FULLSCREEN */}
       {showOnboarding && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 md:p-6 overflow-y-auto" style={{ background: 'radial-gradient(110% 90% at 50% 0%, #121E1B 0%, #0F1A16 34%, #0C1511 100%)', paddingTop: 'var(--safe-area-inset-top, 0px)' }}>
-          <div className="w-full max-w-[560px] flex flex-col items-center text-center py-5 md:py-6">
-            <div className="relative">
+        <div className="fixed inset-0 z-[80] flex items-start md:items-center justify-center p-4 md:p-8 overflow-y-auto" style={{ background: 'radial-gradient(110% 90% at 50% 0%, #121E1B 0%, #0F1A16 34%, #0C1511 100%)', paddingTop: 'var(--safe-area-inset-top, 0px)' }}>
+          <div className="w-full max-w-[560px] md:max-w-[980px] flex flex-col md:flex-row items-center md:items-center justify-center gap-6 md:gap-12 text-center md:text-left py-4 md:py-6 min-h-full">
+            <div className="relative shrink-0 md:w-[420px] flex justify-center">
               <div className="absolute -inset-12 rounded-full opacity-25 blur-[32px]" style={{ background: 'radial-gradient(circle, rgba(46,90,138,0.38) 0%, rgba(200,168,106,0.14) 44%, transparent 72%)' }} />
               {/* PRIMARY VISUAL REFERENCE - exact as uploaded, max 340px */}
-              <img src={logoUrl} alt="Mi Panorama - Eagle Compass Credit Cards" className="relative w-[320px] max-w-[84vw] h-auto object-contain select-none" style={{ maxWidth: '340px', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.55)) drop-shadow(0 0 20px rgba(46,90,138,0.28))' }} />
+              <img src={logoUrl} alt="Mi Panorama - Eagle Compass Credit Cards" className="relative w-[320px] max-w-[84vw] md:w-[380px] md:max-w-[380px] h-auto object-contain select-none" style={{ maxWidth: '340px', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.55)) drop-shadow(0 0 20px rgba(46,90,138,0.28))' }} />
             </div>
-            <h1 className="mt-3 text-[23px] md:text-[30px] leading-[1] tracking-[0.08em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
+            <div className="w-full max-w-[390px] md:max-w-[440px] flex flex-col items-center md:items-start">
+            <h1 className="mt-0 text-[23px] md:text-[34px] leading-[1] tracking-[0.08em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
             <p className="mt-2 max-w-[38ch] font-mono text-[12px] md:text-[13px] tracking-[0.01em] leading-[1.65] text-[#A9B8BB]">{t.onboarding.sub}</p>
 
             <div className="mt-4 w-full max-w-[390px] grid gap-2.5 text-left">
