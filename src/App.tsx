@@ -650,7 +650,7 @@ export default function App() {
     if (draft.saldo !== null && draft.saldo !== undefined && String(draft.saldo) !== '' && (isNaN(Number(draft.saldo)) || Number(draft.saldo) < 0)) return false;
     if (draft.corte !== null && draft.corte !== undefined && String(draft.corte) !== '' && (isNaN(Number(draft.corte)) || Number(draft.corte) < 1 || Number(draft.corte) > 31)) return false;
     if (draft.pago !== null && draft.pago !== undefined && String(draft.pago) !== '' && (isNaN(Number(draft.pago)) || Number(draft.pago) < 1 || Number(draft.pago) > 31)) return false;
-    if (draft.last4 !== null && draft.last4 !== undefined && String(draft.last4).trim() !== '' && !/^\d{1,4}$/.test(String(draft.last4))) return false;
+    if (draft.last4 !== null && draft.last4 !== undefined && String(draft.last4).trim() !== '' && !/^\d{4}$/.test(String(draft.last4))) return false;
     return true;
   };
 
