@@ -823,7 +823,7 @@ export default function App() {
             <div className="relative shrink-0 md:w-[420px] flex justify-center">
               <div className="absolute -inset-12 rounded-full opacity-25 blur-[32px]" style={{ background: 'radial-gradient(circle, rgba(46,90,138,0.38) 0%, rgba(200,168,106,0.14) 44%, transparent 72%)' }} />
               {/* PRIMARY VISUAL REFERENCE - exact as uploaded, max 340px */}
-              <img src={logoUrl} alt="Mi Panorama - Eagle Compass Credit Cards" className="relative w-[320px] max-w-[84vw] md:w-[380px] md:max-w-[380px] h-auto object-contain select-none" style={{ maxWidth: '340px', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.55)) drop-shadow(0 0 20px rgba(46,90,138,0.28))' }} />
+              <img src={logoUrl} alt="Mi Panorama - Eagle Compass Credit Cards" className="relative w-[320px] max-w-[84vw] md:w-[380px] md:max-w-[380px] h-auto object-contain select-none" style={{ maxWidth: '100%', filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.55)) drop-shadow(0 0 20px rgba(46,90,138,0.28))' }} />
             </div>
             <div className="w-full max-w-[390px] md:max-w-[440px] flex flex-col items-center md:items-start">
             <h1 className="mt-0 text-[23px] md:text-[34px] leading-[1] tracking-[0.08em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
@@ -843,7 +843,7 @@ export default function App() {
               })}
             </div>
 
-            <div className="mt-10 w-full max-w-[380px] grid gap-3">
+            <div className="mt-6 md:mt-8 w-full max-w-[380px] grid gap-3">
               <button onClick={handleCreatePanorama} className="w-full h-[48px] min-h-[48px] rounded-full bg-[#3A6E9E] border border-[#2E5A8A] text-[11px] tracking-[0.16em] uppercase font-[800] text-[#EDE9E3] hover:bg-[#2E5A8A] transition active:scale-[0.98] shadow-[0_8px_24px_rgba(46,90,138,0.35),inset_0_1px_0_rgba(255,255,255,0.18)]">
                 {t.onboarding.ctaPrimary}
               </button>
@@ -852,12 +852,12 @@ export default function App() {
               </button>
             </div>
 
-            <div className="mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border bg-[#101A16]/80 backdrop-blur" style={{ borderColor: '#1E2F27' }}>
+            <div className="mt-5 md:mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border bg-[#101A16]/80 backdrop-blur" style={{ borderColor: '#1E2F27' }}>
               <span className="w-[5px] h-[5px] rounded-full bg-[#3A6E9E] shadow-[0_0_8px_rgba(58,110,158,0.6)]" />
               <span className="font-mono text-[9px] tracking-[0.12em] text-[#8FA0A3] uppercase">{t.onboarding.trustRow}</span>
             </div>
 
-            <div className="mt-6 flex items-center gap-2">
+            <div className="mt-4 md:mt-6 flex items-center gap-2">
               <div className="flex items-center rounded-full border p-[3px] bg-[#101A16]" style={{ borderColor: '#2A3F4A' }}>
                 <button onClick={() => setLang('es')} className={`h-[30px] min-h-[30px] px-4 rounded-full text-[10px] tracking-[0.12em] font-mono uppercase font-[700] transition ${lang === 'es' ? 'bg-[#F6F4F0] text-[#101A16] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]' : 'text-[#8BA3B8] hover:text-[#D6D2CC]'}`}>ES</button>
                 <button onClick={() => setLang('en')} className={`h-[30px] min-h-[30px] px-4 rounded-full text-[10px] tracking-[0.12em] font-mono uppercase font-[700] transition ${lang === 'en' ? 'bg-[#F6F4F0] text-[#101A16] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]' : 'text-[#8BA3B8] hover:text-[#D6D2CC]'}`}>EN</button>
