@@ -588,10 +588,10 @@ export default function App() {
 
   const totalLimite = useMemo(() => cards.reduce((a, c) => a + (c.limite ?? 0), 0), [cards]);
   const totalSaldo = useMemo(() => cards.reduce((a, c) => a + (c.saldo ?? 0), 0), [cards]);
-  const hasLimite = useMemo(() => cards.some(c => c.limite !== null && isFinite(c.limite as number)), [cards]);
-  const hasSaldo = useMemo(() => cards.some(c => c.saldo !== null && isFinite(c.saldo as number)), [cards]);
+  const hasLimite = useMemo(() => cards.length > 0 && cards.every(c => c.limite !== null && isFinite(c.limite as number)), [cards]);
+  const hasSaldo = useMemo(() => cards.length > 0 && cards.every(c => c.saldo !== null && isFinite(c.saldo as number)), [cards]);
   const totalDisponible = hasLimite && hasSaldo ? totalLimite - totalSaldo : null;
-  const utilizacionGlobal = hasLimite && totalLimite > 0 ? (totalSaldo / totalLimite) * 100 : 0;
+  const utilizacionGlobal = hasLimite && hasSaldo && totalLimite > 0 ? (totalSaldo / totalLimite) * 100 : 0;
 
   const nextCortes = useMemo(() => cards.map(c => ({ id: c.id, info: getNextOccurrence(c.corte), card: c })).filter(x => x.info !== null) as { id: string; info: { date: Date; daysUntil: number }; card: CardData }[], [cards]);
   const nextPagos = useMemo(() => cards.map(c => ({ id: c.id, info: getNextOccurrence(c.pago), card: c })).filter(x => x.info !== null) as { id: string; info: { date: Date; daysUntil: number }; card: CardData }[], [cards]);
@@ -893,7 +893,7 @@ export default function App() {
                           <div className="w-[28px] h-[28px] rounded-full bg-[#101A16] border grid place-items-center shrink-0" style={{ borderColor: '#2A3F4A' }}><span className="w-[5px] h-[5px] rounded-full bg-[#EDE9E3]" /></div>
                           <div>
                             <div className="text-[12px] font-[700] text-[#101A16]">{lang === 'es' ? `Corte en ${nearestCorte.info.daysUntil} días — ${nearestCorte.card.nombre}` : `Statement in ${nearestCorte.info.daysUntil} days — ${nearestCorte.card.nombre}`}</div>
-                            <div className="text-[11px] font-mono leading-[1.5] text-[#6B7C7F] mt-1">{lang === 'es' ? `Si compras hoy, probablemente entre en este ciclo. Si esperas después del día ${nearestCorte.card.corte}, entraría en el siguiente.` : `If you buy today, likely enters this cycle. After day ${nearestCorte.card.corte}, next cycle.`}</div>
+                            <div className="text-[11px] font-mono leading-[1.5] text-[#6B7C7F] mt-1">{lang === 'es' ? `Tu fecha de corte registrada es el día ${nearestCorte.card.corte}. El momento exacto en que una compra entra en un ciclo depende de cuándo el emisor procesa la operación.` : `Your recorded statement day is ${nearestCorte.card.corte}. The exact cycle for a purchase depends on when the issuer processes the transaction.`}</div>
                           </div>
                         </div>
                       ) : (
