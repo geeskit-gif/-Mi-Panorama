@@ -325,7 +325,21 @@ const i18n = {
       neutral1: 'With this card, your balance would change from',
       neutral2: 'to',
       neutral3: 'Your utilization would go from',
-      truthNote: 'This tool does not tell you which card is best. It shows what changes with each option.',
+      truthNote: 'We compare alternatives using your data. We do not predict score changes or invent issuer information.',
+      scoreLabel: 'Your credit score',
+      scoreHint: 'Optional. Enter it exactly as shown by the source where you checked it.',
+      scoreUnknown: 'No score recorded',
+      scoreNote: 'Your score is context. We do not use our own model to predict how it will change.',
+      alternativesTitle: 'Alternatives for this purchase',
+      lowerImpact: 'Lower known impact',
+      reportTiming: 'Reporting',
+      cutoff: 'Statement',
+      payment: 'Payment',
+      impact: 'Known impact',
+      utilizationChange: 'Utilization change',
+      unknownTiming: 'Reporting moment unknown',
+      knownAtCutoff: 'Reported at statement date',
+      unavailable: 'Not calculable with current data',
       whyTitle: 'What we can calculate about timing',
       unknown: 'We do not have a statement date for this local calculation.',
       listUnknown: [
@@ -1198,11 +1212,37 @@ export default function App() {
                     const utilDesp = limite && nuevoSaldo !== null && limite>0 ? (nuevoSaldo/limite)*100 : null;
                     const exceeds = dispDesp !== null && dispDesp < 0;
                     const missingData = saldo === null || limite === null;
+                    const cutoffInfo = getNextOccurrence(card.corte);
+                    const paymentInfo = getNextOccurrence(card.pago);
+                    const reportLabel = card.reporte === 'fecha_corte'
+                      ? t.comprar.knownAtCutoff
+                      : card.reporte === 'desconocido'
+                        ? t.comprar.unknownTiming
+                        : t.tarjetas.reporteOpts[card.reporte] || t.comprar.unknownTiming;
+                    const utilizationDelta = utilAntes !== null && utilDesp !== null ? utilDesp - utilAntes : null;
                     return (
                       <div key={card.id} className="rounded-[16px] border bg-[#121E1B] p-[18px] shadow-[0_8px_24px_rgba(0,0,0,0.28)]" style={{ borderColor: exceeds ? '#8B3A3A' : '#2A3F4A' }}>
                         <div className="flex items-center justify-between gap-2">
                           <div className="text-[12px] font-[700] text-[#EDE9E3]">{card.emisor} {card.nombre} {card.last4 ? `•••• ${card.last4}` : `(${t.tarjetas.noLast4})`}</div>
                           {exceeds && <span className="px-2 py-[2px] rounded-full bg-[#8B3A3A]/20 border border-[#8B3A3A]/40 text-[9px] font-mono tracking-[0.12em] uppercase text-[#E8A0A0]">{lang==='es'?'Supera':'Exceeds'}</span>}
+                        </div>
+                        <div className="mt-3 grid grid-cols-3 gap-2 font-mono text-[10px]">
+                          <div className="rounded-[10px] bg-[#101A16] border p-2.5" style={{ borderColor: '#263A33' }}>
+                            <div className="text-[8px] tracking-[0.12em] uppercase text-[#6B7C7F]">{t.comprar.cutoff}</div>
+                            <div className="mt-1 text-[#D6D2CC]">{cutoffInfo ? formatNextDate(cutoffInfo, lang, t) : t.trust.desconocida}</div>
+                          </div>
+                          <div className="rounded-[10px] bg-[#101A16] border p-2.5" style={{ borderColor: '#263A33' }}>
+                            <div className="text-[8px] tracking-[0.12em] uppercase text-[#6B7C7F]">{t.comprar.payment}</div>
+                            <div className="mt-1 text-[#D6D2CC]">{paymentInfo ? formatNextDate(paymentInfo, lang, t) : t.trust.desconocida}</div>
+                          </div>
+                          <div className="rounded-[10px] bg-[#101A16] border p-2.5" style={{ borderColor: '#263A33' }}>
+                            <div className="text-[8px] tracking-[0.12em] uppercase text-[#6B7C7F]">{t.comprar.reportTiming}</div>
+                            <div className="mt-1 text-[#D6D2CC]">{reportLabel}</div>
+                          </div>
+                        </div>
+                        <div className="mt-2 rounded-[10px] border bg-[#101A16] p-2.5 font-mono text-[10px]" style={{ borderColor: '#263A33' }}>
+                          <span className="text-[#6B7C7F] uppercase tracking-[0.12em]">{t.comprar.impact}: </span>
+                          <span className="text-[#D6D2CC]">{utilizationDelta !== null ? `${t.comprar.utilizationChange}: ${utilizationDelta >= 0 ? '+' : ''}${utilizationDelta.toFixed(1)} pp` : t.comprar.unavailable}</span>
                         </div>
                         <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-[11px]">
                           <div className="rounded-[10px] bg-[#101A16] border p-2.5" style={{ borderColor: '#263A33' }}>
