@@ -20,8 +20,8 @@ type CardData = {
 };
 
 const SAMPLE_CARDS: CardData[] = [
-  { id: 'sample-bbva', nombre: 'Oro', emisor: 'BBVA', limite: 45000, saldo: 10250, corte: 15, pago: 5, last4: '4821', reporte: 'fecha_corte', isSample: true },
-  { id: 'sample-sant', nombre: 'LikeU', emisor: 'Santander', limite: 30000, saldo: 8400, corte: 22, pago: 12, last4: '1093', reporte: 'inicio_mes', isSample: true },
+  { id: 'sample-a', nombre: 'Tarjeta Ejemplo A', emisor: 'Emisor de ejemplo', limite: 45000, saldo: 10250, corte: 15, pago: 5, last4: null, reporte: 'fecha_corte', isSample: true },
+  { id: 'sample-b', nombre: 'Tarjeta Ejemplo B', emisor: 'Emisor de ejemplo', limite: 30000, saldo: 8400, corte: 22, pago: 12, last4: null, reporte: 'inicio_mes', isSample: true },
 ];
 
 /* ===== i18n FULL V1 ===== */
