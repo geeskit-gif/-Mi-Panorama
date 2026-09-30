@@ -1251,12 +1251,12 @@ export default function App() {
             <div className="mt-5 grid grid-cols-2 gap-3">
               {[
                 { k: 'nombre', label: t.tarjetas.fields.nombre, ph: lang==='es'?'Oro, LikeU...':'Gold, LikeU...', type: 'text' },
-                { k: 'emisor', label: t.tarjetas.fields.emisor, ph: lang==='es'?'BBVA, Santander...':'BBVA, Santander...', type: 'text' },
+                { k: 'emisor', label: t.tarjetas.fields.emisor, ph: lang==='es'?'Ej. banco o emisor':'e.g. bank or issuer', type: 'text' },
                 { k: 'limite', label: t.tarjetas.fields.limite, ph: '30000', type: 'number' },
                 { k: 'saldo', label: t.tarjetas.fields.saldo, ph: '8500', type: 'number' },
                 { k: 'corte', label: t.tarjetas.fields.corte, ph: '15', type: 'number' },
                 { k: 'pago', label: t.tarjetas.fields.pago, ph: '5', type: 'number' },
-                { k: 'last4', label: t.tarjetas.fields.last4, ph: '4821', type: 'text' },
+                { k: 'last4', label: t.tarjetas.fields.last4, ph: '1234', type: 'text' },
               ].map(f => (
                 <div key={f.k} className={f.k === 'nombre' || f.k === 'emisor' ? 'col-span-2 md:col-span-1' : 'col-span-1'}>
                   <label className="text-[10px] font-mono tracking-[0.12em] uppercase text-[#6B7C7F]">{f.label}</label>
