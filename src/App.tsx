@@ -1096,13 +1096,13 @@ export default function App() {
                 <button onClick={openAddModal} className="mt-5 h-[48px] min-h-[48px] px-6 rounded-full bg-[#101A16] border text-[#EDE9E3] text-[11px] tracking-[0.12em] uppercase font-[700]" style={{ borderColor: '#2A3F4A' }}>{t.tarjetas.add}</button>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 gap-4 md:gap-[18px] md:overflow-visible overflow-x-auto md:overflow-x-visible snap-x md:snap-none pb-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[18px]">
                 {cards.map(card => {
                   const disponible = card.limite !== null && card.saldo !== null ? card.limite - card.saldo : null;
                   const utiliz = card.limite && card.saldo !== null && card.limite>0 ? (card.saldo / card.limite) * 100 : null;
                   return (
-                    <div key={card.id} className="group min-w-[88%] md:min-w-0 snap-start">
-                      <div className="relative rounded-[16px] border bg-[#101A16] p-[18px] overflow-hidden h-[204px]" style={{ borderColor: '#2A3F4A', boxShadow: '0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(46,90,138,0.12) inset, inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+                    <button key={card.id} type="button" onClick={() => openEditModal(card)} className="group text-left min-w-0 w-full">
+                      <div className="relative rounded-[16px] border bg-[#101A16] p-[18px] overflow-hidden h-[204px] transition-transform duration-200 group-hover:-translate-y-[2px] group-active:scale-[0.99]" style={{ borderColor: '#2A3F4A', boxShadow: '0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(46,90,138,0.12) inset, inset 0 1px 0 rgba(255,255,255,0.06)' }}>
                         <div className="absolute inset-0 opacity-[0.38]" style={{ background: 'radial-gradient(58% 82% at 18% 18%, rgba(58,110,158,0.34) 0%, transparent 60%), radial-gradient(42% 62% at 84% 82%, rgba(200,168,106,0.11) 0%, transparent 60%), linear-gradient(128deg, rgba(42,74,58,0.18) 0%, transparent 36%)' }} />
                         <div className="absolute -right-10 -bottom-10 w-[96px] h-[96px] rounded-full border opacity-20" style={{ borderColor: '#3A6E9E' }} />
                         <div className="absolute -right-4 -bottom-4 w-[72px] h-[72px] rounded-full border border-dashed opacity-20" style={{ borderColor: '#C8A86A' }} />
@@ -1119,40 +1119,14 @@ export default function App() {
                             <div className="text-[10px] tracking-[0.12em] uppercase font-mono text-[#8BA3B8]">{card.emisor} — {card.nombre} {card.isSample && <span className="ml-1 px-1.5 py-[1px] rounded-full border text-[8px]" style={{ borderColor: '#C8A86A', color: '#C8A86A' }}>{t.tarjetas.sampleTag}</span>}</div>
                             <div className="mt-1 text-[11px] font-mono text-[#8BA3B8]">{utiliz !== null ? `${lang==='es'?'Utilización':'Utilization'} ${utiliz.toFixed(1)}%` : lang==='es'?'Sin datos suficientes':'Not enough data'}</div>
                           </div>
-                          <button onClick={() => openEditModal(card)} className="min-h-[32px] h-[32px] text-[10px] font-mono tracking-[0.12em] uppercase text-[#8BA3B8] hover:text-[#EDE9E3] border px-3 rounded-full bg-[#121E1B]/60" style={{ borderColor: '#2A3F4A' }}>{t.tarjetas.edit}</button>
+                          <span className="min-h-[32px] h-[32px] px-3 rounded-full border bg-[#121E1B]/60 grid place-items-center text-[10px] font-mono tracking-[0.12em] uppercase text-[#8BA3B8]" style={{ borderColor: '#2A3F4A' }}>{lang === 'es' ? 'VER' : 'VIEW'}</span>
                         </div>
                       </div>
-
-                      <div className="mt-[-12px] rounded-[16px] border bg-[#F6F4F0] p-[18px] pt-[22px] shadow-[0_4px_24px_rgba(0,0,0,0.06)]" style={{ borderColor: '#D6D2CC', boxShadow: '0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 #E8E4DE' }}>
-                        <div className="grid grid-cols-2 gap-3">
-                          {[
-                            { label: t.tarjetas.fields.nombre, value: card.nombre, trust: 'hecho' as Trust },
-                            { label: t.tarjetas.fields.emisor, value: card.emisor, trust: 'hecho' as Trust },
-                            { label: t.tarjetas.fields.limite, value: card.limite !== null ? formatMoney(card.limite, lang) : '—', trust: (card.limite !== null ? 'hecho' : 'desconocida') as Trust },
-                            { label: t.tarjetas.fields.saldo, value: card.saldo !== null ? formatMoney(card.saldo, lang) : '—', trust: (card.saldo !== null ? 'hecho' : 'desconocida') as Trust },
-                            { label: lang==='es'?'Disponible':'Available', value: disponible !== null ? formatMoney(disponible, lang) : '—', trust: (disponible !== null ? 'derivado' : 'desconocida') as Trust },
-                            { label: t.tarjetas.fields.corte, value: card.corte ? `${lang==='es'?'Día':'Day'} ${card.corte}` : '—', trust: (card.corte ? 'hecho' : 'desconocida') as Trust },
-                            { label: t.tarjetas.fields.pago, value: card.pago ? `${lang==='es'?'Día':'Day'} ${card.pago}` : '—', trust: (card.pago ? 'hecho' : 'desconocida') as Trust },
-                            { label: t.tarjetas.fields.reporte, value: t.tarjetas.reporteOpts[card.reporte] || t.tarjetas.reporteOpts.desconocido, trust: (card.reporte !== 'desconocido' ? 'hecho' : 'desconocida') as Trust },
-                          ].map(f => (
-                            <div key={f.label} className={`rounded-[12px] border p-[11px] min-h-[56px] ${f.value === '—' ? 'border-dashed bg-[#FBFAF7]' : 'bg-white'}`} style={{ borderColor: '#D6D2CC' }}>
-                              <div className="flex items-center justify-between gap-1 flex-wrap">
-                                <span className="text-[10px] tracking-[0.12em] uppercase font-mono text-[#6B7C7F]">{f.label}</span>
-                                <TrustBadge type={f.trust} lang={lang} compact />
-                              </div>
-                              <div className="mt-1 text-[13px] font-[700] text-[#101A16] font-mono break-words">{f.value}</div>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="mt-3 flex gap-2">
-                          <button onClick={() => openEditModal(card)} className="min-h-[36px] h-[36px] px-4 rounded-full border bg-white text-[10px] tracking-[0.12em] uppercase font-[700] text-[#101A16] hover:bg-[#FBFAF7]" style={{ borderColor: '#D6D2CC' }}>{t.tarjetas.edit}</button>
-                          <button onClick={() => setShowDeleteConfirm(card.id)} className="min-h-[36px] h-[36px] px-4 rounded-full border bg-white text-[10px] tracking-[0.12em] uppercase font-[700] text-[#8B3A3A] hover:bg-[#FFF5F5]" style={{ borderColor: '#D6D2CC' }}>{t.tarjetas.delete}</button>
-                        </div>
-                      </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>
+            )}
             )}
           </div>
         )}
