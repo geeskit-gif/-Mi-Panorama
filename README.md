@@ -19,3 +19,6 @@ npm run dev
 ## Build
 npm run build
 npm run preview
+
+
+<!-- Automatic deployment: Cloudflare Workers Builds -->
