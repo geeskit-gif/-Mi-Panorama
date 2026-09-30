@@ -50,11 +50,12 @@ const i18n = {
       footer: 'DATOS LOCALES · Los datos se guardan en este navegador. · SIN CONEXIÓN BANCARIA'
     },
     onboarding: {
-      title: 'CREA TU PANORAMA',
-      sub: 'Entiende tus tarjetas, tus fechas y lo que cambia cuando compras.',
+      title: 'TU PANORAMA CREDITICIO',
+      sub: 'Entiende tus tarjetas, tus fechas y tus decisiones de crédito en un solo lugar.',
+      points: ['TUS TARJETAS — Conoce lo que tienes.', 'TUS FECHAS — Entiende cuándo ocurren.', 'TUS DECISIONES — Compara antes de comprar.'],
       ctaPrimary: 'CREAR MI PANORAMA',
       ctaSecondary: 'EXPLORAR CON DATOS DE EJEMPLO',
-      trustRow: 'DATOS LOCALES · Los datos se guardan en este navegador. · SIN CONEXIÓN BANCARIA',
+      trustRow: 'TUS DATOS SE GUARDAN LOCALMENTE EN ESTE DISPOSITIVO',
     },
     demoBanner: {
       text: 'DATOS DE EJEMPLO — No son tus datos reales.',
@@ -232,11 +233,12 @@ const i18n = {
       footer: 'LOCAL DATA · Saved in this browser. · NO BANK CONNECTION'
     },
     onboarding: {
-      title: 'CREATE YOUR PANORAMA',
-      sub: 'Understand your cards, dates and what changes when you buy.',
-      ctaPrimary: 'CREATE MY VIEW',
+      title: 'YOUR CREDIT PANORAMA',
+      sub: 'Understand your cards, dates and credit decisions in one place.',
+      points: ['YOUR CARDS — Know what you have.', 'YOUR DATES — Understand when things happen.', 'YOUR DECISIONS — Compare before you buy.'],
+      ctaPrimary: 'CREATE MY PANORAMA',
       ctaSecondary: 'EXPLORE WITH SAMPLE DATA',
-      trustRow: 'LOCAL DATA · Saved in this browser. · NO BANK CONNECTION',
+      trustRow: 'YOUR DATA IS STORED LOCALLY ON THIS DEVICE',
     },
     demoBanner: {
       text: 'SAMPLE DATA — Not your real data.',
@@ -1539,4 +1541,21 @@ export default function App() {
       `}</style>
     </div>
   );
-}
+}      <h1 className="mt-6 text-[23px] md:text-[30px] leading-[1] tracking-[0.08em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
+      <p className="mt-3 max-w-[38ch] font-mono text-[12px] md:text-[13px] tracking-[0.01em] leading-[1.65] text-[#A9B8BB]">{t.onboarding.sub}</p>
+
+      <div className="mt-6 w-full max-w-[390px] grid gap-2.5 text-left">
+        {t.onboarding.points.map((point: string) => {
+          const [label, ...rest] = point.split(' — ');
+          return (
+            <div key={label} className="flex items-start gap-3 px-1">
+              <span className="mt-[5px] w-[5px] h-[5px] shrink-0 rounded-full bg-[#3A6E9E]" />
+              <span className="font-mono text-[10px] md:text-[11px] leading-[1.5] tracking-[0.04em] text-[#A9B8BB]">
+                <span className="text-[#EDE9E3] font-[700]">{label}</span>{rest.length ? <> — {rest.join(' — ')}</> : null}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-7 w-full max-w-[380px] grid gap-2.5">
