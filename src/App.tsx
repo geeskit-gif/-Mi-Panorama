@@ -1555,21 +1555,4 @@ export default function App() {
       `}</style>
     </div>
   );
-}      <h1 className="mt-6 text-[23px] md:text-[30px] leading-[1] tracking-[0.08em] font-[800] text-[#EDE9E3]" style={{ fontFamily: '"Instrument Sans", Inter, system-ui, sans-serif' }}>{t.onboarding.title}</h1>
-      <p className="mt-3 max-w-[38ch] font-mono text-[12px] md:text-[13px] tracking-[0.01em] leading-[1.65] text-[#A9B8BB]">{t.onboarding.sub}</p>
-
-      <div className="mt-6 w-full max-w-[390px] grid gap-2.5 text-left">
-        {t.onboarding.points.map((point: string) => {
-          const [label, ...rest] = point.split(' — ');
-          return (
-            <div key={label} className="flex items-start gap-3 px-1">
-              <span className="mt-[5px] w-[5px] h-[5px] shrink-0 rounded-full bg-[#3A6E9E]" />
-              <span className="font-mono text-[10px] md:text-[11px] leading-[1.5] tracking-[0.04em] text-[#A9B8BB]">
-                <span className="text-[#EDE9E3] font-[700]">{label}</span>{rest.length ? <> — {rest.join(' — ')}</> : null}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-7 w-full max-w-[380px] grid gap-2.5">
+}
