@@ -1,0 +1,54 @@
+name: Install Current Mi Panorama
+
+on:
+  workflow_dispatch:
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract current ZIP
+        run: |
+          rm -rf /tmp/mi-panorama
+          mkdir -p /tmp/mi-panorama
+          unzip -q mi-panorama-current.zip -d /tmp/mi-panorama
+
+      - name: Detect project folder
+        run: |
+          COUNT=$(find /tmp/mi-panorama -mindepth 1 -maxdepth 1 | wc -l)
+
+          if [ "$COUNT" -eq 1 ] && [ -d "$(find /tmp/mi-panorama -mindepth 1 -maxdepth 1 -type d)" ]; then
+            SRC="$(find /tmp/mi-panorama -mindepth 1 -maxdepth 1 -type d)"
+          else
+            SRC="/tmp/mi-panorama"
+          fi
+
+          echo "SRC=$SRC" >> "$GITHUB_ENV"
+
+      - name: Clean old project files
+        run: |
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name ".git" \
+            ! -name ".github" \
+            ! -name "mi-panorama-current.zip" \
+            -exec rm -rf {} +
+
+      - name: Install current frontend
+        run: |
+          cp -a "$SRC"/. .
+
+      - name: Remove ZIP
+        run: |
+          rm -f mi-panorama-current.zip
+
+      - name: Commit current frontend
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Install current Mi Panorama frontend"
+          git push
