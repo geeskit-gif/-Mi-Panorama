@@ -58,7 +58,8 @@ const i18n = {
     },
     demoBanner: {
       text: 'DATOS DE EJEMPLO — No son tus datos reales.',
-      cta: 'Crear mi panorama real',
+      cta: 'Volver a mis datos',
+      explore: 'Explorar datos de ejemplo',
     },
     panorama: {
       title: 'Tu panorama',
@@ -239,7 +240,8 @@ const i18n = {
     },
     demoBanner: {
       text: 'SAMPLE DATA — Not your real data.',
-      cta: 'Create my real view',
+      cta: 'Back to my data',
+      explore: 'Explore sample data',
     },
     panorama: {
       title: 'Your view',
@@ -761,14 +763,27 @@ export default function App() {
   };
 
   const handleCreatePanorama = () => {
+    let restored: CardData[] = [];
+    try {
+      const raw = localStorage.getItem('mp_real_cards');
+      const parsed = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(parsed)) restored = parsed.filter((c: any) => c && c.isSample !== true);
+    } catch {}
     setIsDemo(false);
-    setCards([]);
+    setCards(restored);
     setHasOnboarded(true);
     setShowOnboarding(false);
-    try { localStorage.setItem('mp_demo', 'false'); localStorage.setItem('mp_cards', JSON.stringify([])); localStorage.setItem('mp_hasOnboarded','true'); } catch {}
+    try {
+      localStorage.setItem('mp_demo', 'false');
+      localStorage.setItem('mp_cards', JSON.stringify(restored));
+      localStorage.setItem('mp_hasOnboarded','true');
+    } catch {}
     setTab('tarjetas');
   };
   const handleExploreSample = () => {
+    if (!isDemo) {
+      try { localStorage.setItem('mp_real_cards', JSON.stringify(cards.filter(c => c.isSample !== true))); } catch {}
+    }
     setIsDemo(true);
     setHasOnboarded(true);
     setCards(SAMPLE_CARDS);
@@ -777,11 +792,7 @@ export default function App() {
     setTab('panorama');
   };
   const handleClearDemo = () => {
-    setIsDemo(false);
-    setCards([]);
-    setHasOnboarded(false);
-    setShowOnboarding(true);
-    try { localStorage.setItem('mp_demo', 'false'); localStorage.setItem('mp_cards', JSON.stringify([])); localStorage.setItem('mp_hasOnboarded','false'); } catch {}
+    handleCreatePanorama();
   };
 
   const freeCount = cards.length;
@@ -877,6 +888,12 @@ export default function App() {
           <WireframeArc />
         </div>
       </div>
+
+      {!isDemo && !showOnboarding && (
+        <div className="max-w-[1240px] mx-auto px-4 md:px-6 mt-2 flex justify-end">
+          <button onClick={handleExploreSample} className="h-[34px] min-h-[34px] px-3.5 rounded-full border bg-[#121E1B] text-[9px] tracking-[0.12em] uppercase font-[700] text-[#8BA3B8] hover:text-[#D6D2CC] hover:bg-[#15211C] active:scale-[0.98]" style={{ borderColor: '#2A3F4A' }}>{t.demoBanner.explore}</button>
+        </div>
+      )}
 
       {isDemo && !showOnboarding && (
         <div className="max-w-[1240px] mx-auto px-4 md:px-6 mt-2">
