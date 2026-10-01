@@ -20,8 +20,8 @@ type CardData = {
 };
 
 const SAMPLE_CARDS: CardData[] = [
-  { id: 'sample-a', nombre: 'Tarjeta Ejemplo A', emisor: 'Emisor de ejemplo', limite: 45000, saldo: 10250, corte: 15, pago: 5, last4: null, reporte: 'fecha_corte', isSample: true },
-  { id: 'sample-b', nombre: 'Tarjeta Ejemplo B', emisor: 'Emisor de ejemplo', limite: 30000, saldo: 8400, corte: 22, pago: 12, last4: null, reporte: 'inicio_mes', isSample: true },
+  { id: 'sample-a', nombre: 'Tarjeta Ejemplo A', emisor: 'Emisor de ejemplo', limite: 4500, saldo: 1025, corte: 15, pago: 5, last4: null, reporte: 'fecha_corte', isSample: true },
+  { id: 'sample-b', nombre: 'Tarjeta Ejemplo B', emisor: 'Emisor de ejemplo', limite: 3000, saldo: 840, corte: 22, pago: 12, last4: null, reporte: 'inicio_mes', isSample: true },
 ];
 
 /* ===== i18n FULL V1 ===== */
@@ -433,7 +433,7 @@ function setStorage(key: string, value: any) {
 
 function formatMoney(v: number | null, lang: Lang): string {
   if (v === null || !isFinite(v)) return '—';
-  const loc = lang === 'es' ? 'es-MX' : 'en-US';
+  const loc = 'en-US';
   return `$${Math.round(v).toLocaleString(loc)}`;
 }
 
@@ -1073,9 +1073,9 @@ export default function App() {
                       <Gauge value={utilizacionGlobal} />
                       <div className="mt-2 flex items-center gap-2"><TrustBadge type="derivado" lang={lang} /></div>
                       <div className="mt-6 grid grid-cols-3 gap-2 text-center w-full">
-                        <div className="rounded-[10px] bg-[#101A16] border py-3 flex flex-col justify-center" style={{ borderColor: '#263A33' }}><div className="font-mono text-[10px] text-[#8BA3B8] tracking-[0.12em] uppercase">{t.panorama.limite}</div><div className="text-[13px] font-mono text-[#EDE9E3] mt-1">{hasLimite ? `$${totalLimite.toLocaleString(lang==='es'?'es-MX':'en-US')}` : '—'}</div></div>
-                        <div className="rounded-[10px] bg-[#101A16] border py-3 flex flex-col justify-center" style={{ borderColor: '#263A33' }}><div className="font-mono text-[10px] text-[#8BA3B8] tracking-[0.12em] uppercase">{t.panorama.saldo}</div><div className="text-[13px] font-mono text-[#EDE9E3] mt-1">{hasSaldo ? `$${totalSaldo.toLocaleString(lang==='es'?'es-MX':'en-US')}` : '—'}</div></div>
-                        <div className="rounded-[10px] bg-[#101A16] border py-3 flex flex-col justify-center" style={{ borderColor: '#263A33' }}><div className="font-mono text-[10px] text-[#8BA3B8] tracking-[0.12em] uppercase">{t.panorama.disponible}</div><div className="text-[13px] font-mono text-[#EDE9E3] mt-1">{totalDisponible !== null ? `$${totalDisponible.toLocaleString(lang==='es'?'es-MX':'en-US')}` : '—'}</div></div>
+                        <div className="rounded-[10px] bg-[#101A16] border py-3 flex flex-col justify-center" style={{ borderColor: '#263A33' }}><div className="font-mono text-[10px] text-[#8BA3B8] tracking-[0.12em] uppercase">{t.panorama.limite}</div><div className="text-[13px] font-mono text-[#EDE9E3] mt-1">{hasLimite ? `$${totalLimite.toLocaleString('en-US')}` : '—'}</div></div>
+                        <div className="rounded-[10px] bg-[#101A16] border py-3 flex flex-col justify-center" style={{ borderColor: '#263A33' }}><div className="font-mono text-[10px] text-[#8BA3B8] tracking-[0.12em] uppercase">{t.panorama.saldo}</div><div className="text-[13px] font-mono text-[#EDE9E3] mt-1">{hasSaldo ? `$${totalSaldo.toLocaleString('en-US')}` : '—'}</div></div>
+                        <div className="rounded-[10px] bg-[#101A16] border py-3 flex flex-col justify-center" style={{ borderColor: '#263A33' }}><div className="font-mono text-[10px] text-[#8BA3B8] tracking-[0.12em] uppercase">{t.panorama.disponible}</div><div className="text-[13px] font-mono text-[#EDE9E3] mt-1">{totalDisponible !== null ? `$${totalDisponible.toLocaleString('en-US')}` : '—'}</div></div>
                       </div>
                     </div>
                   </div>
@@ -1193,7 +1193,7 @@ export default function App() {
                       <div className="mt-1.5 font-mono text-[9px] leading-[1.5] text-[#6B7C7F]">{t.comprar.scoreHint}</div>
                     </div>
                     <div>
-                      <label className="text-[10px] font-mono tracking-[0.12em] uppercase text-[#6B7C7F]">{t.comprar.monto} MXN</label>
+                      <label className="text-[10px] font-mono tracking-[0.12em] uppercase text-[#6B7C7F]">{t.comprar.monto} USD</label>
                       <div className="mt-2 flex items-center gap-2">
                         <span className="font-mono text-[28px] leading-none text-[#101A16]">$</span>
                         <input
@@ -1447,8 +1447,8 @@ export default function App() {
               {[
                 { k: 'nombre', label: t.tarjetas.fields.nombre, ph: lang==='es'?'Oro, LikeU...':'Gold, LikeU...', type: 'text' },
                 { k: 'emisor', label: t.tarjetas.fields.emisor, ph: lang==='es'?'Ej. banco o emisor':'e.g. bank or issuer', type: 'text' },
-                { k: 'limite', label: t.tarjetas.fields.limite, ph: '30000', type: 'number' },
-                { k: 'saldo', label: t.tarjetas.fields.saldo, ph: '8500', type: 'number' },
+                { k: 'limite', label: t.tarjetas.fields.limite, ph: '3000', type: 'number' },
+                { k: 'saldo', label: t.tarjetas.fields.saldo, ph: '850', type: 'number' },
                 { k: 'corte', label: t.tarjetas.fields.corte, ph: '15', type: 'number' },
                 { k: 'pago', label: t.tarjetas.fields.pago, ph: '5', type: 'number' },
                 { k: 'last4', label: t.tarjetas.fields.last4, ph: '1234', type: 'text' },
