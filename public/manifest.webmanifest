@@ -1,8 +1,8 @@
 {
   "name": "Mi Panorama",
   "short_name": "Mi Panorama",
-  "description": "Claridad para tus tarjetas, tus fechas y tus decisiones de crédito.",
-  "lang": "es-MX",
+  "description": "Claridad para tus tarjetas de crédito en Estados Unidos, tus fechas y tus decisiones.",
+  "lang": "es-US",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
